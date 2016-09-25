@@ -176,6 +176,17 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 		return false;
 	}
 
+	@Override
+	public List<UserDocument> getTopFiles(int id) {
+		List<UserDocument> result = new ArrayList<>();
+		int i = 0;
+		for (UserDocument doc : getSortedDocs(id)) {
+			if (i++<3) break;
+			result.add(doc);
+		}
+		return result;
+	}
+
 
 	public List<UserDocument> getSortedDocs(int userId) {
 		List<UserDocument> result = findAllByUserId(userId);
@@ -183,7 +194,7 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 		Collections.sort(result, new Comparator<UserDocument>() {
 			@Override
 			public int compare(UserDocument o1, UserDocument o2) {
-				return o2.getContent().length - o1.getContent().length;
+				return o2.getSize() - o1.getSize();
 			}
 		});
 		return result;

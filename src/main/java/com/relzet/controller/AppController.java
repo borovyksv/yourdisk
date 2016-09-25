@@ -69,7 +69,7 @@ public class AppController {
 	/**
 	 * This method will list all existing users.
 	 */
-	@RequestMapping(value = { "/", "/list" }, method = RequestMethod.GET)
+	@RequestMapping(value = {  "/list" }, method = RequestMethod.GET)
 	public String listUsers(ModelMap model) {
 
 		List<User> users = userService.findAllUsers();
@@ -198,12 +198,12 @@ public class AppController {
 	 * This method handles login GET requests.
 	 * If users is already logged-in and tries to goto login page again, will be redirected to list page.
 	 */
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
 	public String loginPage() {
 		if (isCurrentAuthenticationAnonymous()) {
 			return "login";
 	    } else if (isCurrentRoleUser()){
-	    	return "redirect:/add-document-"+userService.findBySSO(getPrincipal());
+	    	return "redirect:/add-document-"+userService.findBySSO(getPrincipal()).getId();
 	    } else {
 			return "redirect:/list";
 		}
@@ -298,7 +298,8 @@ public class AppController {
 		model.addAttribute("folderNameError", folderNameError);
 		model.addAttribute("folderUniqueError", folderUniqueError);
 
-		User user = userService.findById(userId);
+
+		User user = userService.findBySSO(getPrincipal());
 		model.addAttribute("user", user);
 
 		FileBucket fileModel = new FileBucket();
@@ -307,11 +308,16 @@ public class AppController {
 		FolderBucket folderBucket = new FolderBucket();
 		model.addAttribute("folderBucket", folderBucket);
 
-		List<UserDocument> folders = userDocumentService.findFoldersInFolder(userId, docId);
+		List<UserDocument> folders = userDocumentService.findFoldersInFolder(user.getId(), docId);
 		model.addAttribute("folders", folders);
 
-		List<UserDocument> documents = userDocumentService.findDocsInFolder(userId, docId);
+		List<UserDocument> documents = userDocumentService.findDocsInFolder(user.getId(), docId);
 		model.addAttribute("documents", documents);
+
+		List<UserDocument> topFiles = userDocumentService.getTopFiles(user.getId());
+		model.addAttribute("top", topFiles);
+
+
 
 
 
@@ -323,7 +329,7 @@ public class AppController {
 
 	@RequestMapping(value = { "/filter-{userId}-{docId}" }, method = RequestMethod.GET)
 	public String openFolder(@PathVariable int userId, @RequestParam("filters") String[] filters, @PathVariable int docId, ModelMap model) throws IOException {
-		User user = userService.findById(userId);
+		User user = userService.findBySSO(getPrincipal());
 		model.addAttribute("user", user);
 
 		FileBucket fileModel = new FileBucket();
@@ -332,7 +338,7 @@ public class AppController {
 		FolderBucket folderBucket = new FolderBucket();
 		model.addAttribute("folderBucket", folderBucket);
 
-		List<UserDocument> documents = userDocumentService.filterDocsInFolder(userId, docId, filters);
+		List<UserDocument> documents = userDocumentService.filterDocsInFolder(user.getId(), docId, filters);
 		model.addAttribute("documents", documents);
 
 

@@ -85,5 +85,10 @@ public class UserDocumentServiceImpl implements UserDocumentService{
 		dao.updateDoc(document);
 	}
 
+	@Override
+	public List<UserDocument> getTopFiles(int id) {
+		return dao.getTopFiles(id);
+	}
+
 
 }

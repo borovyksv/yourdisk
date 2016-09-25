@@ -112,11 +112,11 @@
 				</div>
 			</div>
 
-			<c:if test="${edit}">
-			<span class="well pull-left">
-				<a href="<c:url value='/add-document-${user.id}' />">Click here to upload/manage your documents</a>
-			</span>
-			</c:if>
+			<%--<c:if test="${edit}">--%>
+			<%--<span class="well pull-left">--%>
+				<%--<a href="<c:url value='/add-document-${user.id}' />">Click here to upload/manage your documents</a>--%>
+			<%--</span>--%>
+			<%--</c:if>--%>
 		</form:form>
 	</div>
 </body>

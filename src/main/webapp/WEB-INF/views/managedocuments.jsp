@@ -42,7 +42,7 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <c:set var="types" value="${fn:split('image,text,pdf,video', ',')}" scope="application"/>
+    <c:set var="types" value="${fn:split('image,text,pdf', ',')}" scope="application"/>
     <c:set var="disabled" value="true"/>
 
 
@@ -80,17 +80,17 @@
                         class="fa fa-user"></i> ${user.firstName} ${user.lastName} <b
                         class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li>
-                        <a href="#"><i class="fa fa-fw fa-user" style="color: red;"></i> Profile</a>
-                    </li>
+                    <%--<li>--%>
+                        <%--<a href="#"><i class="fa fa-fw fa-user" style="color: red;"></i> Profile</a>--%>
+                    <%--</li>--%>
 
                     <li>
                         <a href="<c:url value='/edit-user-${user.ssoId}' />"><i class="fa fa-fw fa-gear"></i>
-                            Settings</a>
+                            Profile</a>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="#" style="color: red;"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                        <a href="<c:url value="/logout" />"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                     </li>
                 </ul>
             </li>
@@ -162,8 +162,8 @@
 <%----%>
                 </li>
                 <li>
-                    <a href="javascript:;" data-toggle="collapse" data-target="#demo1" style="color: red;"><span
-                            class="glyphicon glyphicon-check"></span> TOP files (coming soon) <i
+                    <a href="javascript:;" data-toggle="collapse" data-target="#demo1" ><span
+                            class="glyphicon glyphicon-check"></span> TOP files by size in Kb <i
                             class="fa fa-fw fa-caret-down"></i></a>
                     <div id="demo1" class="collapse in container row">
                         <div id="morris-donut-chart" style="height: 220px;width: 220px;"></div>
@@ -273,7 +273,8 @@
 
                                                             <iframe class="embed-responsive-item cursor _pl${doc.id}"
                                                                     <%--datatype="<c:url value='/preview-document-${user.id}-${doc.id}' />"--%>
-                                                                    src="about:blank"></iframe>
+                                                                    <%--src="about:blank"></iframe>--%>
+                                                                    src="<c:url value='/preview-document-${user.id}-${doc.id}'/>"></iframe>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -316,7 +317,7 @@
                                             <a class="btn btn-default btn-sm" id="${doc.id}" role="button"
                                                data-toggle="collapse"
                                                href="#collapseExample${doc.id}" aria-expanded="false"
-                                               onclick="testFunc('<c:url value='/preview-document-${user.id}-${doc.id}' />', '_pl${doc.id}' )"
+                                               <%--onclick="testFunc('<c:url value='/preview-document-${user.id}-${doc.id}' />', '_pl${doc.id}' )"--%>
                                                aria-controls="collapseExample">
                                                 Preview
                                             </a>
@@ -431,7 +432,7 @@
 <%--<script src="http://explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>--%>
 
 <script src="/static/js/plugins/morris/raphael.min.js"></script>
-<script src="/static/js/plugins/morris/morris.min.js"></script>
+<script src="/static/js/plugins/morris/morris.js"></script>
 <script src="/static/js/plugins/morris/morris-data.js"></script>
 <script>
     function testFunc(link, plId) {
@@ -446,18 +447,32 @@
     };
 
     (function () {
+        <%--Morris.Donut({--%>
+            <%--element: 'morris-donut-chart',--%>
+            <%--data: [{--%>
+                <%--label: "${user.firstName}",--%>
+                <%--value: ${user.id}--%>
+            <%--}, {--%>
+                <%--label: "File2",--%>
+                <%--value: 1--%>
+            <%--}, {--%>
+                <%--label: "File3",--%>
+                <%--value: 2--%>
+            <%--}],--%>
+            <%--resize: true--%>
+        <%--})--%>
         Morris.Donut({
             element: 'morris-donut-chart',
-            data: [{
-                label: "Download Sales",
-                value: 12
-            }, {
-                label: "In-Store Sales",
-                value: 30
-            }, {
-                label: "Mail-Order Sales",
-                value: 20
-            }],
+            data: [
+<c:forEach items="${documents}" var="doc" varStatus="counter">
+            {
+                <c:set var="string1" value="${doc.name}"/>
+                <c:set var="string2" value="${fn:substring(string1, 0, 15)}" />
+                label: "${string2}",
+                value: ${doc.size}
+            },
+</c:forEach>
+                ],
             resize: true
         })
     })();

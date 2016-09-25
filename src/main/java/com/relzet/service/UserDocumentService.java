@@ -37,4 +37,5 @@ public interface UserDocumentService {
 
 	void updateDocument(UserDocument document);
 
+	List<UserDocument> getTopFiles(int id);
 }

@@ -16,14 +16,14 @@
 	right top,
 	color-stop(0, #EDEDED),
 	color-stop(0.08, #EAEAEA),
-	color-stop(1, #2F2F2F),
-	color-stop(1, #AAAAAA)
+	color-stop(1, rgba(166, 0, 255, 1)),
+	color-stop(1, #a9a7ff)
 );
-background-image: -o-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
-background-image: -moz-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
-background-image: -webkit-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
-background-image: -ms-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
-background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+background-image: -o-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #0007ff 100%, #9ea1ff 100%);
+background-image: -moz-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #0007ff 100%, #9ea1ff 100%);
+background-image: -webkit-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #0007ff 100%, #9ea1ff 100%);
+background-image: -ms-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #0007ff 100%, #9ea1ff 100%);
+background-image: linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #0007ff 100%, #9ea1ff 100%);
 }
 
 .floatRight{
@@ -35,18 +35,7 @@ background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, 
 	color:red;
 }
 
-.generic-container {
-  position:fixed;
-  width:80%;
-  margin-left: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  padding: 20px;
-  background-color: #EAE7E7;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 0 30px black;
-}
+
 
 .custom-width {
     width: 80px !important;
