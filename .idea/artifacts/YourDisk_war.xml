@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="YourDisk:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="YourDisk.war">
+      <element id="artifact" artifact-name="YourDisk:war exploded" />
+    </root>
+  </artifact>
+</component>

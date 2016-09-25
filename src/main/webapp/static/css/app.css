@@ -1,0 +1,308 @@
+/*html{*/
+	/*background-color:#2F2F2F;*/
+/*}*/
+
+/*body{*/
+	/*height: 100%;*/
+	/*background-color:rgb(245, 245, 245);*/
+/*}*/
+
+
+#mainWrapper {
+	height: 100%;
+	background-image: -webkit-gradient(
+	linear,
+	right bottom,
+	right top,
+	color-stop(0, #EDEDED),
+	color-stop(0.08, #EAEAEA),
+	color-stop(1, #2F2F2F),
+	color-stop(1, #AAAAAA)
+);
+background-image: -o-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+background-image: -moz-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+background-image: -webkit-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+background-image: -ms-linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+background-image: linear-gradient(to top, #EDEDED 0%, #EAEAEA 8%, #2F2F2F 100%, #AAAAAA 100%);
+}
+
+.floatRight{
+	float:right;
+	margin-right: 18px;
+}
+
+.has-error{
+	color:red;
+}
+
+.generic-container {
+  position:fixed;
+  width:80%;
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #EAE7E7;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 0 30px black;
+}
+
+.custom-width {
+    width: 80px !important;
+}
+
+body, #mainWrapper, .form-control{
+	font-size:12px!important;
+}
+
+#mainWrapper {
+	/*height: 720px; Without explicit px values, % in children's does not work*/
+	height: 100vh; /*with Viewport-Percentage, we can handles all devices screens  */
+	padding-left:10px;
+	padding-right:10px;
+	padding-bottom:10px;
+}
+
+.login-container {
+    margin-top: 100px;
+    background-color: floralwhite;
+    width: 40%;
+    left: 30%;
+    position: absolute;
+}
+
+.login-card {
+    width: 80%;
+    margin: auto;
+}
+
+.login-form {
+    padding: 10%;
+}
+
+.authbar{
+	margin-bottom:15px;
+}
+
+
+
+.info-text {
+	color: rgba(255, 255, 255, 0.45)
+}
+
+.cursor {
+	cursor: pointer;
+}
+
+.checkbox {
+	color: #cfcccb;
+}
+
+/*.floatRight{*/
+/*float:right;*/
+/*margin-right: 18px;*/
+/*}*/
+
+/*.has-error{*/
+/*color:red;*/
+/*}*/
+
+.search {
+	margin-left: 5px;
+	margin-right: 5px
+}
+
+.uploadcontainer{
+	background-color: ghostwhite;
+	padding: 20px;
+}
+
+.tablecontainer{
+	padding-left: 20px;
+}
+
+.dropdown-menu {
+	min-width: 383px;
+}
+.generic-container {
+
+	width:70%;
+	margin-left:auto;
+	margin-right:auto;
+	margin-bottom: 20px;
+	padding: 20px;
+	background-color: #EAE7E7;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: 0 0 30px black;
+}
+
+.custom-width {
+	width: 80px !important;
+}
+
+/* layout.css Style */
+.upload-drop-zone {
+	height: 200px;
+	border-width: 2px;
+	margin-bottom: 20px;
+}
+
+/* skin.css Style*/
+.upload-drop-zone {
+	color: #ccc;
+	border-style: dashed;
+	border-color: #ccc;
+	line-height: 200px;
+	text-align: center
+}
+.upload-drop-zone.drop {
+	color: #222;
+	border-color: #222;
+}
+.btn-file {
+	position: relative;
+	overflow: hidden;
+}
+.btn-file input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+
+/************************
+Css orignal http://codepen.io/jlalovi/details/bIyAr
+************************/
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.titular {
+	display: block;
+	line-height: 60px;
+	margin: 0;
+	text-align: center;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+.horizontal-list {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+.horizontal-list li {
+	float: left;
+}
+.block {
+	margin: 25px 25px 0 0;
+	background: #222;
+	border-radius: 5px;
+	float: left;
+	width: 300px;
+	overflow: hidden;
+}
+/******************************************** LEFT CONTAINER *****************************************/
+.left-container {}
+.menu-box {
+	height: 360px;
+}
+
+.donut-chart-block {
+	overflow: hidden;
+}
+.donut-chart-block .titular {
+	padding: 10px 0;
+}
+.os-percentages li {
+	width: 50%;
+	border-left: 1px solid #394264;
+
+	background: #fff;
+}
+.os {
+
+	margin: 0;
+	padding: 10px 0 5px;
+	font-size: 15px;
+}
+.os.first {
+	border-top: 4px solid #e64c65;
+}
+.os.second {
+	border-top: 4px solid #11a8ab;
+}
+.os.third {
+	border-top: 4px solid #fcb150;
+}
+.os.fourth {
+	border-top: 4px solid #4fc4f6;
+}
+.os-percentage {
+	margin: 0;
+	padding: 0 0 15px 10px;
+	font-size: 25px;
+}
+.line-chart-block, .bar-chart-block {
+	height: 400px;
+}
+.line-chart {
+	height: 200px;
+	background: #11a8ab;
+}
+.time-lenght {
+	padding-top: 22px;
+	padding-left: 38px;
+	overflow: hidden;
+}
+.time-lenght-btn {
+	display: block;
+	width: 70px;
+	line-height: 32px;
+	background: #50597b;
+	border-radius: 5px;
+	font-size: 14px;
+	text-align: center;
+	margin-right: 5px;
+	-webkit-transition: background .3s;
+	transition: background .3s;
+}
+.time-lenght-btn:hover {
+	text-decoration: none;
+	background: #e64c65;
+}
+.month-data {
+	padding-top: 28px;
+}
+.month-data p {
+	display: inline-block;
+	margin: 0;
+	padding: 0 25px 15px;
+	font-size: 16px;
+}
+.month-data p:last-child {
+	padding: 0 25px;
+	float: right;
+	font-size: 15px;
+}
+.increment {
+	color: #e64c65;
+}
+
+
+#divname{
+	height:100px;
+}
