@@ -2,6 +2,8 @@
 <%@ page isELIgnored="false" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 
 <html>
 
@@ -13,6 +15,8 @@
 </head>
 
 <body>
+<div id="mainWrapper">
+
  	<div class="generic-container">
 		<%@include file="authheader.jsp" %>
 
@@ -91,7 +95,15 @@
 				<div class="form-group col-md-12">
 					<label class="col-md-3 control-lable" for="userProfiles">Roles</label>
 					<div class="col-md-7">
-						<form:select path="userProfiles" items="${roles}" multiple="true" itemValue="id" itemLabel="type" class="form-control input-sm" />
+						<%--<form:select path="userProfiles" items="${roles}" multiple="true" itemValue="id" itemLabel="type" class="form-control input-sm" />--%>
+							<form:select id="userProfiles" name="userProfiles" class="form-control input-sm" multiple="multiple" path="userProfiles">
+								<sec:authorize access="hasRole('ADMIN')">
+								<option value="2">ADMIN</option>
+								<option value="3">DBA</option>
+								</sec:authorize>
+								<option value="1" >USER</option>
+							</form:select>
+
 						<div class="has-error">
 							<form:errors path="userProfiles" class="help-inline"/>
 						</div>
@@ -118,6 +130,7 @@
 			<%--</span>--%>
 			<%--</c:if>--%>
 		</form:form>
+	</div>
 	</div>
 </body>
 </html>

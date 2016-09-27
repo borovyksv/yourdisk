@@ -19,7 +19,7 @@
 		</div>
 		
 		<span class="well floatRight">
-			Go to <a href="<c:url value='/list' />">Users List</a>
+			<a href="<c:url value='/add-document-${user.id}' />">Your Disk</a>
 		</span>
 	</div>
 </body>
