@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <html lang="en">
 
@@ -81,13 +82,19 @@
                         class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <%--<li>--%>
-                        <%--<a href="#"><i class="fa fa-fw fa-user" style="color: red;"></i> Profile</a>--%>
+                    <%--<a href="#"><i class="fa fa-fw fa-user" style="color: red;"></i> Profile</a>--%>
                     <%--</li>--%>
 
                     <li>
                         <a href="<c:url value='/edit-user-${user.ssoId}' />"><i class="fa fa-fw fa-gear"></i>
                             Profile</a>
                     </li>
+                    <sec:authorize access="hasRole('ADMIN') or hasRole('DBA')">
+                        <li>
+                            <a href="<c:url value='/list' />">
+                                User List</a>
+                        </li>
+                    </sec:authorize>
                     <li class="divider"></li>
                     <li>
                         <a href="<c:url value="/logout" />"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
@@ -102,7 +109,8 @@
 
                     <form class="form-group input-group search" action="/search-${user.id}-${currentFolder.id}">
                         <input type="text" placeholder="Search files" class="form-control" name="target">
-                        <span class="input-group-btn"><button class="btn btn-default" type="submit"><i
+                        <span class="input-group-btn"><button
+                                class="btn btn-default" type="submit"><i
                                 class="fa fa-search"></i></button></span>
                     </form>
                 </li>
@@ -125,8 +133,8 @@
                                 class="glyphicon glyphicon-warning-sign"></span> ${folderUniqueError} </a>
                     </c:if>
                 </li>
-<%----%>
-<%----%>
+                <%----%>
+                <%----%>
                 <li>
                     <a href="javascript:;" data-toggle="collapse" data-target="#demo"><span
                             class="glyphicon glyphicon-check"></span> Filters <i
@@ -157,12 +165,12 @@
                             </div>
                             <input type="submit" value="search">
                         </form>
-<%----%>
+                        <%----%>
                     </div>
-<%----%>
+                    <%----%>
                 </li>
                 <li>
-                    <a href="javascript:;" data-toggle="collapse" data-target="#demo1" ><span
+                    <a href="javascript:;" data-toggle="collapse" data-target="#demo1"><span
                             class="glyphicon glyphicon-check"></span> TOP files by size in Kb <i
                             class="fa fa-fw fa-caret-down"></i></a>
                     <div id="demo1" class="collapse in container row">
@@ -227,9 +235,10 @@
                                     <div class="row">
 
                                         <a href="<c:url value='/delete-folder-${user.id}-${doc.id}' />"
-                                           class="btn btn-default btn-sm pull-right" style="margin-right: 10px">Delete <span
+                                           class="btn btn-default btn-sm pull-right"
+                                           style="margin-right: 10px">Delete <span
                                                 class="glyphicon glyphicon-trash"></span>
-                                            </a>
+                                        </a>
                                     </div>
                                 </div>
                             </a>
@@ -271,10 +280,10 @@
                                                     <div class="well">
                                                         <div class="embed-responsive embed-responsive-16by9">
 
-                                                            <iframe class="embed-responsive-item cursor _pl${doc.id}"
-                                                                    <%--datatype="<c:url value='/preview-document-${user.id}-${doc.id}' />"--%>
-                                                                    <%--src="about:blank"></iframe>--%>
-                                                                    src="<c:url value='/preview-document-${user.id}-${doc.id}'/>"></iframe>
+                                                                <%--<iframe class="embed-responsive-item cursor _pl${doc.id}"--%>
+                                                                <%--&lt;%&ndash;datatype="<c:url value='/preview-document-${user.id}-${doc.id}' />"&ndash;%&gt;--%>
+                                                                <%--&lt;%&ndash;src="about:blank"></iframe>&ndash;%&gt;--%>
+                                                                <%--src="<c:url value='/preview-document-${user.id}-${doc.id}'/>"></iframe>--%>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -314,13 +323,15 @@
                                            class="btn btn-default btn-sm"> <span
                                                 class="fa fa-download"></span> Download</a>
                                         <c:if test="${disabled eq false}">
-                                            <a class="btn btn-default btn-sm" id="${doc.id}" role="button"
-                                               data-toggle="collapse"
-                                               href="#collapseExample${doc.id}" aria-expanded="false"
-                                               <%--onclick="testFunc('<c:url value='/preview-document-${user.id}-${doc.id}' />', '_pl${doc.id}' )"--%>
-                                               aria-controls="collapseExample">
-                                                Preview
-                                            </a>
+                                            <%--<a class="btn btn-default btn-sm" id="${doc.id}" role="button"--%>
+                                            <%--data-toggle="collapse"--%>
+                                            <%--href="#collapseExample${doc.id}" aria-expanded="false"--%>
+                                            <%--&lt;%&ndash;onclick="testFunc('<c:url value='/preview-document-${user.id}-${doc.id}' />', '_pl${doc.id}' )"&ndash;%&gt;--%>
+                                            <%--aria-controls="collapseExample">--%>
+                                            <%--Preview--%>
+                                            <%--</a>--%>
+                                            <a href="<c:url value='/preview-document-${user.id}-${doc.id}' />"
+                                               target="_blank" class="btn btn-default btn-sm">Preview </span> </a>
                                         </c:if>
                                         <a href="<c:url value='/delete-document-${user.id}-${doc.id}-${currentFolder.id}' />"
                                            class="btn btn-default btn-sm">Delete <span
@@ -397,12 +408,12 @@
             </div>
             <div class="modal-body">
                 <form:form role="form" method="POST" modelAttribute="folderBucket"
-                      action="/create-folder-${user.id}-${currentFolder.id}">
+                           action="/create-folder-${user.id}-${currentFolder.id}">
                     <div class="form-group text-center">
 
                         <form:input class="form-control input-sm" type="text"
-                               placeholder="Folder name"
-                               name="folderName" path="folderName"/>
+                                    placeholder="Folder name"
+                                    name="folderName" path="folderName"/>
                     </div>
                     <button type="submit" class="btn btn-success btn-block"> Create</button>
                 </form:form>
@@ -435,48 +446,35 @@
 <script src="/static/js/plugins/morris/morris.js"></script>
 <script src="/static/js/plugins/morris/morris-data.js"></script>
 <script>
-    function testFunc(link, plId) {
-        var el = $("." + plId);
-        var attr = el.attr('src');
-        if(attr === "about:blank"){
-            el.attr('src', link);
-        }
-        else{
-            el.attr('src', "about:blank");
-        }
-    };
+    //    function testFunc(link, plId) {
+    //        var el = $("." + plId);
+    //        var attr = el.attr('src');
+    //        if(attr === "about:blank"){
+    //            el.attr('src', link);
+    //        }
+    //        else{
+    //            el.attr('src', "about:blank");
+    //        }
+    //    };
 
     (function () {
-        <%--Morris.Donut({--%>
-            <%--element: 'morris-donut-chart',--%>
-            <%--data: [{--%>
-                <%--label: "${user.firstName}",--%>
-                <%--value: ${user.id}--%>
-            <%--}, {--%>
-                <%--label: "File2",--%>
-                <%--value: 1--%>
-            <%--}, {--%>
-                <%--label: "File3",--%>
-                <%--value: 2--%>
-            <%--}],--%>
-            <%--resize: true--%>
-        <%--})--%>
+
         Morris.Donut({
             element: 'morris-donut-chart',
             data: [
-<c:forEach items="${documents}" var="doc" varStatus="counter">
-            {
-                <c:set var="string1" value="${doc.name}"/>
-                <c:set var="string2" value="${fn:substring(string1, 0, 15)}" />
-                label: "${string2}",
-                value: ${doc.size}
-            },
-</c:forEach>
-                ],
+                <c:forEach items="${documents}" var="doc" varStatus="counter">
+                {
+                    <c:set var="string1" value="${doc.name}"/>
+                    <c:set var="string2" value="${fn:substring(string1, 0, 15)}" />
+                    label: "${string2}",
+                    value: ${doc.size}
+                },
+                </c:forEach>
+            ],
             resize: true
         })
     })();
-;
+    ;
 </script>
 </body>
 

@@ -38,11 +38,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.antMatchers("/", "/add-document-*", "/search-*", "/download-document-*",  "/open-folder-*", "/filter-*", "/delete-*", "/create-*")
+				.antMatchers("/", "/edit-user-*", "/add-document-*", "/search-*", "/download-document-*",  "/open-folder-*", "/filter-*", "/delete-*", "/create-*")
 				.access("hasRole('USER') or hasRole('ADMIN') or hasRole('DBA')")
 
 				.antMatchers("/delete-user-*").access("hasRole('ADMIN')")
-				.antMatchers("/edit-user-*", "/list").access("hasRole('ADMIN') or hasRole('DBA')").and().formLogin().loginPage("/login")
+				.antMatchers("/list").access("hasRole('ADMIN') or hasRole('DBA')").and().formLogin().loginPage("/login")
 				.loginProcessingUrl("/login").usernameParameter("ssoId").passwordParameter("password").and()
 				.rememberMe().rememberMeParameter("remember-me").tokenRepository(tokenRepository)
 				.tokenValiditySeconds(86400).and().csrf().and().exceptionHandling()

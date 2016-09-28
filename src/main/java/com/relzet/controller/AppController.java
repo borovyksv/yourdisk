@@ -117,13 +117,13 @@ public class AppController {
 		}
 		
 		userService.saveUser(user);
-		model.addAttribute("user", user);
-		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " registered successfully");
-		model.addAttribute("loggedinuser", getPrincipal());
-		//return "success";
-		userDocumentService.saveDocument(createFolder(user, "ROOT"));
+//		model.addAttribute("user", user);
+//		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " registered successfully");
+//		model.addAttribute("loggedinuser", getPrincipal());
 
-		return "registrationsuccess";
+		userDocumentService.saveDocument(createFolder(user, "ROOT"));
+		return "redirect:/add-document-"+user.getId();
+//		return "registrationsuccess";
 	}
 
 
@@ -300,6 +300,9 @@ public class AppController {
 
 
 		User user = userService.findBySSO(getPrincipal());
+
+		if (isCurrentRoleAdmin())user = userService.findById(userId);
+
 		model.addAttribute("user", user);
 
 		FileBucket fileModel = new FileBucket();
@@ -313,6 +316,9 @@ public class AppController {
 
 		List<UserDocument> documents = userDocumentService.findDocsInFolder(user.getId(), docId);
 		model.addAttribute("documents", documents);
+
+		model.addAttribute("loggedinuser", getPrincipal());
+
 
 		List<UserDocument> topFiles = userDocumentService.getTopFiles(user.getId());
 		model.addAttribute("top", topFiles);
@@ -485,6 +491,13 @@ public class AppController {
 				(org.springframework.security.core.userdetails.User)
 						SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			return principal.getAuthorities().iterator().next().getAuthority().equals("ROLE_USER");
+	}
+
+	private boolean isCurrentRoleAdmin() {
+		org.springframework.security.core.userdetails.User principal =
+				(org.springframework.security.core.userdetails.User)
+						SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			return principal.getAuthorities().iterator().next().getAuthority().equals("ROLE_ADMIN");
 	}
 
 
