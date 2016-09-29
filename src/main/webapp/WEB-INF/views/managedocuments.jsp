@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<%--<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>--%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -17,7 +16,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title> Your Disc</title>
+    <title> Your Disk</title>
 
 
     <link rel="shortcut icon" href="/static/icon.png"
@@ -66,7 +65,7 @@
 
 
             <a class="navbar-brand" href="<c:url value='/add-document-${user.id}' />"><i
-                    class="glyphicon glyphicon-hdd"></i> Your Disc
+                    class="glyphicon glyphicon-hdd"></i> Your Disk
                 <c:set var="string" value="${currentFolder.description}"/>
                 <span style="margin-left: 125px" class="glyphicon glyphicon-th-list"></span>
                 Directory: ${fn:replace(string, '.', '/')}
