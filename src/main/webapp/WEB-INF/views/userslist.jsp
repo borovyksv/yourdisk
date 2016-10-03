@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ page isELIgnored="false" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -6,17 +6,17 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>User Registration Form</title>
     <link rel="shortcut icon" href="/static/icon.png"
           type="image/x-icon">
 
     <!-- CSS -->
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-    <link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet"></link>
-    <link href="<c:url value='/static/font-awesome/css/font-awesome.min.css' />" rel="stylesheet"></link>
-    <link href="<c:url value='/static/css/form-elements.css' />" rel="stylesheet"></link>
-    <link href="<c:url value='/static/css/style.css' />" rel="stylesheet"></link>
+    <link href="<c:url value='/static/css/bootstrap.css' />" rel="stylesheet">
+    <link href="<c:url value='/static/font-awesome/css/font-awesome.min.css' />" rel="stylesheet">
+    <link href="<c:url value='/static/css/form-elements.css' />" rel="stylesheet">
+    <link href="<c:url value='/static/css/style.css' />" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

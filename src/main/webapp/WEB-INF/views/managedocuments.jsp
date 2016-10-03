@@ -8,8 +8,6 @@
 <html lang="en">
 
 <head>
-
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -437,23 +435,13 @@
 <script src="/static/js/plugins/morris/morris.js"></script>
 <script src="/static/js/plugins/morris/morris-data.js"></script>
 <script>
-    //    function testFunc(link, plId) {
-    //        var el = $("." + plId);
-    //        var attr = el.attr('src');
-    //        if(attr === "about:blank"){
-    //            el.attr('src', link);
-    //        }
-    //        else{
-    //            el.attr('src', "about:blank");
-    //        }
-    //    };
 
     (function () {
 
         Morris.Donut({
             element: 'morris-donut-chart',
             data: [
-                <c:forEach items="${documents}" var="doc" varStatus="counter">
+                <c:forEach items="${top}" var="doc" varStatus="counter">
                 {
                     <c:set var="string1" value="${doc.name}"/>
                     <c:set var="string2" value="${fn:substring(string1, 0, 15)}" />
@@ -465,7 +453,7 @@
             resize: true
         })
     })();
-    ;
+
 </script>
 </body>
 

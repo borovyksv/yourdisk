@@ -2,15 +2,17 @@ package com.relzet.dao;
 
 import com.relzet.model.UserDocument;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@SuppressWarnings("unchecked")
 @Repository("userDocumentDao")
 public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> implements UserDocumentDao{
 
-	@SuppressWarnings("unchecked")
 	public List<UserDocument> findAll() {
 		Criteria crit = createEntityCriteria();
 		return (List<UserDocument>)crit.list();
@@ -24,14 +26,10 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 		update(document);
 	}
 
-
-
-	
 	public UserDocument findById(int id) {
 		return getByKey(id);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<UserDocument> findAllByUserId(int userId){
 		Criteria crit = createEntityCriteria();
 		Criteria userCriteria = crit.createCriteria("user");
@@ -39,7 +37,14 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 		return (List<UserDocument>)crit.list();
 	}
 
-	
+	public List<UserDocument> findAllInFolder(int userId, int folderId) {
+
+		Criteria crit = getCriteriaByUserId(userId);
+		crit.add(Restrictions.eq("parentFolderId", folderId));
+		return (List<UserDocument>)crit.list();
+
+	}
+
 	public void deleteFolderById(int id) {
 		UserDocument document =  getByKey(id);
 			for(UserDocument doc : findAllInFolder(document.getUser().getId(), id)){
@@ -60,81 +65,68 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 			delete(document);
 
 	}
-
-	public List<UserDocument> findAllInFolder(int userId, int docId) {
+	public Criteria getCriteriaByUserId(int userId) {
 		Criteria crit = createEntityCriteria();
 		Criteria userCriteria = crit.createCriteria("user");
 		userCriteria.add(Restrictions.eq("id", userId));
-		crit.add(Restrictions.eq("parentFolderId", docId));
+		return crit;
+	}
+
+
+	public UserDocument findRootByUserId(int userId) {
+		Criteria crit = getCriteriaByUserId(userId);
+		crit.add(Restrictions.eq("parentFolderId", 0));
+		return (UserDocument) crit.uniqueResult();
+	}
+
+	@Override
+	public List<UserDocument> findFoldersInFolder(int userId, int folderId) {
+		Criteria crit = getCriteriaByUserId(userId);
+		crit.add(Restrictions.eq("parentFolderId", folderId));
+		crit.add(Restrictions.eq("type", "folder"));
+		return (List<UserDocument>)crit.list();
+	}
+
+	@Override
+	public List<UserDocument> findDocsInFolder(int userId, int folderId) {
+		Criteria crit = getCriteriaByUserId(userId);
+		crit.add(Restrictions.eq("parentFolderId", folderId));
+		crit.add(Restrictions.ne("type", "folder"));
+		return (List<UserDocument>)crit.list();
+	}
+
+	@Override
+	public List<UserDocument> searchFoldersInFolder(int userId, int folderId, String target) {
+		Criteria crit = getCriteriaByUserId(userId);
+		crit.add(Restrictions.eq("parentFolderId", folderId));
+		crit.add(Restrictions.eq("type", "folder"));
+		crit.add(Restrictions.ilike("name", target, MatchMode.ANYWHERE));
 		return (List<UserDocument>)crit.list();
 
 //		List<UserDocument> result = new ArrayList<>();
 //
-//			for(UserDocument ud: findAllByUserId(userId)) {
-//				if ((ud.getDescription()).equals(findById(docId).getDescription()+"."+ud.getName())) {
-//					result.add(ud);
-//				}
+//		for(UserDocument ud: findAllInFolder(userId, docId)) {
+//			if (ud.getType().equals("folder")&&ud.getName().contains(target)) result.add(ud);
 //		}
 //
 //		return result;
 	}
 
-	public UserDocument findRootByUserId(int userId) {
-
-		Criteria crit = createEntityCriteria();
-		Criteria userCriteria = crit.createCriteria("user");
-		userCriteria.add(Restrictions.eq("id", userId));
-		crit.add(Restrictions.eq("name", "ROOT"));
-
-		return (UserDocument) crit.uniqueResult();
-//		
-	}
-
 	@Override
-	public List<UserDocument> findFoldersInFolder(int userId, int docId) {
-		List<UserDocument> result = new ArrayList<>();
+	public List<UserDocument> searchDocsInFolder(int userId, int folderId, String target) {
+		Criteria crit = getCriteriaByUserId(userId);
+		crit.add(Restrictions.eq("parentFolderId", folderId));
+		crit.add(Restrictions.ne("type", "folder"));
+		crit.add(Restrictions.ilike("name", target, MatchMode.ANYWHERE));
+		return (List<UserDocument>)crit.list();
 
-		for(UserDocument ud: findAllInFolder(userId, docId)) {
-			if (ud.getType().equals("folder")) {
-				result.add(ud);
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public List<UserDocument> findDocsInFolder(int userId, int docId) {
-		List<UserDocument> result = new ArrayList<>();
-
-		for(UserDocument ud: findAllInFolder(userId, docId)) {
-			if (!ud.getType().equals("folder")) {
-				result.add(ud);
-			}
-		}
-
-		return result;
-	}
-
-	@Override
-	public List<UserDocument> searchFoldersInFolder(int userId, int docId, String target) {
-		List<UserDocument> result = new ArrayList<>();
-
-		for(UserDocument ud: findAllInFolder(userId, docId)) {
-			if (ud.getType().equals("folder")&&ud.getName().contains(target)) result.add(ud);
-		}
-
-		return result;
-	}
-
-	@Override
-	public List<UserDocument> searchDocsInFolder(int userId, int docId, String target) {
-		List<UserDocument> result = new ArrayList<UserDocument>();
-
-		for(UserDocument ud: findAllInFolder(userId, docId)) {
-			if ((!ud.getType().equals("folder"))&&ud.getName().contains(target)) result.add(ud);
-		}
-
-		return result;
+//		List<UserDocument> result = new ArrayList<UserDocument>();
+//
+//		for(UserDocument ud: findAllInFolder(userId, docId)) {
+//			if ((!ud.getType().equals("folder"))&&ud.getName().contains(target)) result.add(ud);
+//		}
+//
+//		return result;
 	}
 
 	@Override
@@ -152,15 +144,11 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 			}
 		}
 
-
 		for(UserDocument ud: findAllByUserId(userId)) {
 			for (String format : formats)
 			if (ud.getType().contains(format)) result.add(ud);
 		}
-
 		return result;
-
-
 	}
 
 	@Override
@@ -172,29 +160,12 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 	}
 
 	@Override
-	public List<UserDocument> getTopFiles(int id) {
-		List<UserDocument> result = new ArrayList<>();
-		int i = 0;
-		for (UserDocument doc : getSortedDocs(id)) {
-			if (i++<3) break;
-			result.add(doc);
-		}
-		return result;
+	public List<UserDocument> getTopFiles(int userId) {
+		Criteria crit = getCriteriaByUserId(userId);
+		crit.add(Restrictions.eq("folder", false));
+		crit.addOrder(Order.desc("size"));
+		crit.setMaxResults(5);
+		return (List<UserDocument>)crit.list();
+
 	}
-
-
-	public List<UserDocument> getSortedDocs(int userId) {
-		List<UserDocument> result = findAllByUserId(userId);
-
-		Collections.sort(result, new Comparator<UserDocument>() {
-			@Override
-			public int compare(UserDocument o1, UserDocument o2) {
-				return o2.getSize() - o1.getSize();
-			}
-		});
-		return result;
-	}
-
-
-
 }
