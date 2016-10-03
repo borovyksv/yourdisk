@@ -62,22 +62,21 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 	}
 
 	public List<UserDocument> findAllInFolder(int userId, int docId) {
-//		String description = findById(docId).getDescription();
-//		Criteria crit = createEntityCriteria();
-//		Criteria userCriteria = crit.createCriteria("user");
-//		userCriteria.add(Restrictions.eq("id", userId));
-//		crit.add(Restrictions.eqProperty("description", description+".name"));
-//		return (List<UserDocument>)crit.list();
+		Criteria crit = createEntityCriteria();
+		Criteria userCriteria = crit.createCriteria("user");
+		userCriteria.add(Restrictions.eq("id", userId));
+		crit.add(Restrictions.eq("parentFolderId", docId));
+		return (List<UserDocument>)crit.list();
 
-		List<UserDocument> result = new ArrayList<>();
-
-			for(UserDocument ud: findAllByUserId(userId)) {
-				if ((ud.getDescription()).equals(findById(docId).getDescription()+"."+ud.getName())) {
-					result.add(ud);
-				}
-		}
-
-		return result;
+//		List<UserDocument> result = new ArrayList<>();
+//
+//			for(UserDocument ud: findAllByUserId(userId)) {
+//				if ((ud.getDescription()).equals(findById(docId).getDescription()+"."+ud.getName())) {
+//					result.add(ud);
+//				}
+//		}
+//
+//		return result;
 	}
 
 	public UserDocument findRootByUserId(int userId) {
@@ -88,11 +87,7 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 		crit.add(Restrictions.eq("name", "ROOT"));
 
 		return (UserDocument) crit.uniqueResult();
-//		for(UserDocument ud: findAllByUserId(userId)) {
-//			if (ud.getName().equals("ROOT")) return ud;
-//
-//		}
-//		return null;
+//		
 	}
 
 	@Override

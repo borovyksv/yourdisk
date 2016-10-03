@@ -40,6 +40,7 @@
                     <div class="form-top">
                         <div class="form-top-left">
                             <h3>List of registered users</h3>
+
                         </div>
                     </div>
                     <div class="form-bottom">
@@ -85,6 +86,7 @@
                             </c:forEach>
                             </tbody>
                         </table>
+                            <a href="<c:url value="/logout" />"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                     </div>
                 </div>
             </div>

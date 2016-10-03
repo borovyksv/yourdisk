@@ -15,7 +15,7 @@
 <body>
 <div id="mainWrapper">
     <div class="generic-container">
-        <%@include file="authheader.jsp" %>
+        <%@include file="../authheader.jsp" %>
         <div class="panel panel-default">
             <!-- Default panel contents -->
             <div class="panel-heading"><span class="lead">List of Users </span></div>

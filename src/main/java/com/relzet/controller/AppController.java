@@ -294,8 +294,7 @@ public class AppController {
 	//// TODO: 22.08.2016
 	//// TODO: 22.08.2016
 	@RequestMapping(value = { "/open-folder-{userId}-{docId}" }, method = RequestMethod.GET)
-	public String openFolder(@PathVariable int userId, @PathVariable int docId, ModelMap model, @ModelAttribute("folderNameError") String folderNameError, @ModelAttribute("folderUniqueError") String folderUniqueError) throws IOException {
-		model.addAttribute("folderNameError", folderNameError);
+	public String openFolder(@PathVariable int userId, @PathVariable int docId, ModelMap model, @ModelAttribute("folderUniqueError") String folderUniqueError) throws IOException {
 		model.addAttribute("folderUniqueError", folderUniqueError);
 
 
@@ -334,7 +333,7 @@ public class AppController {
 	}
 
 	@RequestMapping(value = { "/filter-{userId}-{docId}" }, method = RequestMethod.GET)
-	public String openFolder(@PathVariable int userId, @RequestParam("filters") String[] filters, @PathVariable int docId, ModelMap model) throws IOException {
+	public String docsFilter(@PathVariable int userId, @RequestParam("filters") String[] filters, @PathVariable int docId, ModelMap model) throws IOException {
 		User user = userService.findBySSO(getPrincipal());
 		model.addAttribute("user", user);
 
@@ -401,11 +400,6 @@ public class AppController {
 	public String createFolder(@Valid FolderBucket folderBucket, BindingResult result, ModelMap model, @PathVariable int userId, @PathVariable int docId, RedirectAttributes redirectAttrs) throws IOException{
 		String folderName = folderBucket.getFolderName();
 
-		if (folderName.contains(".")||folderName.contains("/")||folderName.contains("\\")){
-			redirectAttrs.addFlashAttribute("folderNameError", "A Foldername cannot contain any of the following characters:\n" +
-					"\\ / .");
-			return "redirect:/open-folder-"+userId+"-"+docId;
-		}
 		if (userDocumentService.checkFolderNameUnique(userId, docId, folderName)){
 			redirectAttrs.addFlashAttribute("folderUniqueError", "Folder \""+folderName+"\" already exists");
 			return "redirect:/open-folder-"+userId+"-"+docId;
@@ -414,14 +408,8 @@ public class AppController {
 		User user = userService.findById(userId);
 		model.addAttribute("user", user);
 
+		userDocumentService.saveDocument(createFolder(user,folderName,docId));
 
-		userDocumentService.saveDocument(createFolder(
-				user,
-				folderName,
-				userDocumentService.findById(docId).getDescription()+"."+folderName
-		));
-
-//			return "redirect:/add-document-"+userId;
 		return "redirect:/open-folder-"+userId+"-"+docId;
 
 	}
@@ -443,7 +431,7 @@ public class AppController {
 		folder.setFilesCounter(folder.getFilesCounter()+1);
 
 		document.setName(multipartFile.getOriginalFilename());
-		document.setDescription(folder.getDescription()+"."+multipartFile.getOriginalFilename());
+		document.setParentFolderId(docId);
 		document.setType(multipartFile.getContentType());
 		document.setContent(multipartFile.getBytes());
 		document.setUser(user);
@@ -454,13 +442,11 @@ public class AppController {
 	}
 
 	private UserDocument createFolder(User user , String folderName) {
-		return createFolder(user, folderName, "ROOT");
+		return createFolder(user, folderName, 0);
 	}
 
-	private UserDocument createFolder(User user , String folderName, String parentFolder) {
-		UserDocument doc = new UserDocument(folderName, parentFolder, "folder", new byte[]{0}, user);
-		doc.setFolder(true);
-		return doc;
+	private UserDocument createFolder(User user , String folderName, int parentFolderId) {
+		return new UserDocument(user, folderName, true, parentFolderId, "folder", new byte[]{0});
 	}
 
 	/**

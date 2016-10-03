@@ -66,9 +66,9 @@
 
             <a class="navbar-brand" href="<c:url value='/add-document-${user.id}' />"><i
                     class="glyphicon glyphicon-hdd"></i> Your Disk
-                <c:set var="string" value="${currentFolder.description}"/>
-                <span style="margin-left: 125px" class="glyphicon glyphicon-th-list"></span>
-                Directory: ${fn:replace(string, '.', '/')}
+                <%--<c:set var="string" value="${currentFolder.description}"/>--%>
+                <%--<span style="margin-left: 125px" class="glyphicon glyphicon-th-list"></span>--%>
+                <%--Directory: ${fn:replace(string, '.', '/')}--%>
             </a>
         </div>
         <!-- Top Menu Items -->
@@ -123,10 +123,6 @@
                 <li>
                     <a href="#" type="button" data-toggle="modal" data-target="#new_folder"><span
                             class="glyphicon glyphicon-folder-close"></span> Create new Folder </a>
-                    <c:if test="${fn:length(folderNameError) gt 0}">
-                        <a href="#" type="button" style="color: red"><span
-                                class="glyphicon glyphicon-warning-sign"></span> ${folderNameError} </a>
-                    </c:if>
                     <c:if test="${fn:length(folderUniqueError) gt 0}">
                         <a href="#" type="button" style="color: red"><span
                                 class="glyphicon glyphicon-warning-sign"></span> ${folderUniqueError} </a>
@@ -170,7 +166,7 @@
                 </li>
                 <li>
                     <a href="javascript:;" data-toggle="collapse" data-target="#demo1"><span
-                            class="glyphicon glyphicon-check"></span> TOP files by size in Kb <i
+                            class="fa fa-pie-chart"></span> TOP files (by size in Kb) <i
                             class="fa fa-fw fa-caret-down"></i></a>
                     <div id="demo1" class="collapse in container row">
                         <div id="morris-donut-chart" style="height: 220px;width: 220px;"></div>
@@ -188,11 +184,7 @@
 
         <div class="container-fluid">
             <div class="divider"></div>
-            <%--<div class="alert alert-info"--%>
-            <%--aria-expanded="false" >--%>
-            <%--<c:set var="string" value="${currentFolder.description}"/>--%>
-            <%--<span class="glyphicon glyphicon-th-list"></span> Directory: ${fn:replace(string, '.', '/')}--%>
-            <%--</div>--%>
+
 
             <c:if test="${fn:length(folders) gt 0}">
             <div class="alert alert-success cursor" data-toggle="collapse" data-target="#folders-collapse"
@@ -206,21 +198,21 @@
 
                 <c:forEach items="${folders}" var="doc" varStatus="counter">
 
-                    <div class="col-lg-2 col-md-3">
+                    <div class="col-lg-2 col-md-3 col-xs-6">
                         <div class="panel panel-primary">
                             <div class="panel-heading cursor"
                                  onmouseenter="this.setAttribute('style','background-color:#163b5a;')"
                                  onmouseleave="this.setAttribute('style','background-color:#337ab7;')"
                                  onclick="location.href = '<c:url value='/open-folder-${user.id}-${doc.id}'/>';">
                                 <div class="row">
-                                    <div class="col-xs-2">
+                                    <div class="col-xs-3">
                                         <i class="fa fa-folder fa-3x"></i>
 
                                     </div>
-                                    <div class="col-xs-10 text-right">
+                                    <div class="col-xs-9 text-right">
                                         <div>${doc.name}</div>
                                     </div>
-                                    <div class="col-xs-10 text-right">
+                                    <div class="col-xs-9 text-right">
                                         <div class="info-text">${doc.filesCounter} files</div>
                                         <div class="info-text">${doc.size} Kb</div>
                                     </div>
@@ -266,7 +258,7 @@
                 </c:choose>
                 <c:forEach items="${documents}" var="doc" varStatus="counter">
 
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-3 col-md-6 col-xs-6">
 
                         <div class="panel panel-default">
                             <div class="panel-heading">

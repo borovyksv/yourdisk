@@ -1,6 +1,7 @@
 package com.relzet.model;
 
 import javax.persistence.*;
+import java.util.Arrays;
 
 @Entity
 @Table(name = "USER_DOCUMENT")
@@ -9,21 +10,53 @@ public class UserDocument {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "folder")
+    @Column(name = "is_folder")
     private boolean folder;
 
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
-    @Column(name = "description", length = 255)
-    private String description;
+//    @Column(name = "description", length = 255)
+//    private String description;
 
     @Column(name = "type", length = 100, nullable = false)
     private String type;
+    @Column(name = "parent_folder_id")
+
+    private int parentFolderId;
     @Column(name = "glyphicon", length = 100)
     private String glyphicon;
     @Column(name = "size")
     private int size;
+    @Column(name = "files_counter")
+    private int filesCounter;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "content", nullable = false)
+    private byte[] content;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    public UserDocument() {
+    }
+
+    public UserDocument(User user, String name, boolean folder, int parentFolderId, String type, byte[] content) {
+        this.user = user;
+        this.name = name;
+        this.folder = folder;
+        this.parentFolderId = parentFolderId;
+        this.type = type;
+        this.content = content;
+    }
+
+    public int getParentFolderId() {
+        return parentFolderId;
+    }
+
+    public void setParentFolderId(int parentFolderId) {
+        this.parentFolderId = parentFolderId;
+    }
 
     public int getFilesCounter() {
         return filesCounter;
@@ -39,29 +72,6 @@ public class UserDocument {
 
     public void setSize(int size) {
         this.size = size;
-    }
-
-    @Column(name = "files_counter")
-    private int filesCounter;
-
-
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "content", nullable = false)
-    private byte[] content;
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "USER_ID")
-    private User user;
-
-    public UserDocument() {
-    }
-
-    public UserDocument(String name, String description, String type, byte[] content, User user) {
-        this.name = name;
-        this.description = description;
-        this.type = type;
-        this.content = content;
-        this.user = user;
     }
 
     public String getGlyphicon() {
@@ -97,13 +107,13 @@ public class UserDocument {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
 
     public String getType() {
         return type;
@@ -162,7 +172,17 @@ public class UserDocument {
 
     @Override
     public String toString() {
-        return "UserDocument [id=" + id + ", name=" + name + ", description="
-                + description + ", type=" + type + "]";
+        return "UserDocument{" +
+                "id=" + id +
+                ", folder=" + folder +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", parentFolderId=" + parentFolderId +
+                ", glyphicon='" + glyphicon + '\'' +
+                ", size=" + size +
+                ", filesCounter=" + filesCounter +
+                ", content=" + Arrays.toString(content) +
+                ", user=" + user +
+                '}';
     }
 }
