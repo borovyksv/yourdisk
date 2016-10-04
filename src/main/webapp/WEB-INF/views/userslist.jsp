@@ -6,7 +6,7 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" documentLink="text/html; charset=utf-8">
     <title>User Registration Form</title>
     <link rel="shortcut icon" href="/static/icon.png"
           type="image/x-icon">
@@ -30,8 +30,8 @@
 
 <body>
 
-<!-- Top content -->
-<div class="top-content">
+<!-- Top documentLink -->
+<div class="top-documentLink">
 
     <div class="inner-bg">
         <div class="container">
@@ -71,7 +71,7 @@
                                     <td>${user.email}</td>
                                     <td>${user.ssoId}</td>
                                     <sec:authorize access="hasRole('ADMIN') or hasRole('DBA')">
-                                        <td><a href="<c:url value='/add-document-${user.id}' />"
+                                        <td><a href="<c:url value='/open-root-folder-${user.id}' />"
                                                class="btn btn-info custom-width">Disk</a></td>
                                     </sec:authorize>
                                     <sec:authorize access="hasRole('ADMIN') or hasRole('DBA')">

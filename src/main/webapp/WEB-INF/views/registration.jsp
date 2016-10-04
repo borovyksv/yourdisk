@@ -6,7 +6,7 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" documentLink="text/html; charset=utf-8">
     <title>User Registration Form</title>
     <link rel="shortcut icon" href="/static/icon.png"
           type="image/x-icon">
@@ -30,14 +30,14 @@
 
 <body>
 
-<!-- Top content -->
-<div class="top-content">
+<!-- Top documentLink -->
+<div class="top-documentLink">
 
     <div class="inner-bg">
         <div class="container">
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2 text">
-                    <h1>Welcome to <strong><a href="<c:url value='/add-document-${user.id}' />" >Your Disk</a></strong></h1>
+                    <h1>Welcome to <strong><a href="<c:url value='/open-root-folder-${user.id}' />" >Your Disk</a></strong></h1>
                     <div class="description">
                         <p>
                             Here you can store personal files and documents
@@ -152,11 +152,11 @@
                                     <c:choose>
                                         <c:when test="${edit}">
                                             <button type="submit" class="btn">Update</button>
-                                            <button class="btn" style="margin-top: 2%; background-color: rgba(0, 0, 0, .5);"><a href="<c:url value='/add-document-${user.id}' />">Cancel</a></button>
+                                            <button class="btn" style="margin-top: 2%; background-color: rgba(0, 0, 0, .5);"><a href="<c:url value='/open-root-folder-${user.id}' />">Cancel</a></button>
                                         </c:when>
                                         <c:otherwise>
                                             <button type="submit" class="btn">Register</button>
-                                            <button class="btn" style="margin-top: 2%; background-color: rgba(0, 0, 0, .5);"><a href="<c:url value='/add-document-${user.id}' />">Cancel</a></button>
+                                            <button class="btn" style="margin-top: 2%; background-color: rgba(0, 0, 0, .5);"><a href="<c:url value='/open-root-folder-${user.id}' />">Cancel</a></button>
                                         </c:otherwise>
                                     </c:choose>
                                 </div>

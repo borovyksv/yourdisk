@@ -25,10 +25,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Locale;
-
 
 
 @Controller
@@ -62,6 +61,10 @@ public class AppController {
 		binder.setValidator(fileValidator);
 	}
 
+	/**
+	 * This constant defines location where will store user documents
+	 */
+	private static final String LOCATION = "D:/temp/";
 
 	/**
 	 * This method will list all existing users.
@@ -98,14 +101,9 @@ public class AppController {
 		if (result.hasErrors()) {
 			return "registration";
 		}
-
 		/*
-		 * Preferred way to achieve uniqueness of field [sso] should be implementing custom @Unique annotation 
-		 * and applying it on field [sso] of Model class [User].
-		 * 
-		 * Below mentioned peace of code [if block] is to demonstrate that you can fill custom errors outside the validation
+		 * Below mentioned peace of code [if block] demonstrate how to fill custom errors outside the validation
 		 * framework as well while still using internationalized messages.
-		 * 
 		 */
 		if(!userService.isUserSSOUnique(user.getId(), user.getSsoId())){
 			FieldError ssoError =new FieldError("user","ssoId",messageSource.getMessage("non.unique.ssoId", new String[]{user.getSsoId()}, Locale.getDefault()));
@@ -114,13 +112,8 @@ public class AppController {
 		}
 		
 		userService.saveUser(user);
-//		model.addAttribute("user", user);
-//		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " registered successfully");
-//		model.addAttribute("loggedinuser", getPrincipal());
-
-		userDocumentService.saveDocument(createFolder(user, "ROOT"));
-		return "redirect:/add-document-"+user.getId();
-//		return "registrationsuccess";
+		userDocumentService.saveDocument(createRootFolder(user));
+		return "redirect:/login";
 	}
 
 
@@ -148,19 +141,9 @@ public class AppController {
 			return "registration";
 		}
 
-		/*//Uncomment below 'if block' if you WANT TO ALLOW UPDATING SSO_ID in UI which is a unique key to a User.
-		if(!userService.isUserSSOUnique(user.getId(), user.getSsoId())){
-			FieldError ssoError =new FieldError("user","ssoId",messageSource.getMessage("non.unique.ssoId", new String[]{user.getSsoId()}, Locale.getDefault()));
-		    result.addError(ssoError);
-			return "registration";
-		}*/
-
-
 		userService.updateUser(user);
 
-		model.addAttribute("success", "User " + user.getFirstName() + " "+ user.getLastName() + " updated successfully");
-		model.addAttribute("loggedinuser", getPrincipal());
-		return "registrationsuccess";
+		return "redirect:/login";
 	}
 
 	
@@ -193,6 +176,7 @@ public class AppController {
 
 	/**
 	 * This method handles login GET requests.
+	 * If users is already logged-in and tries to goto login page again, will be redirected to root folder.
 	 * If users is already logged-in and tries to goto login page again, will be redirected to list page.
 	 */
 	@RequestMapping(value = {"/", "/login"}, method = RequestMethod.GET)
@@ -200,7 +184,7 @@ public class AppController {
 		if (isCurrentAuthenticationAnonymous()) {
 			return "login";
 	    } else if (isCurrentRoleUser()){
-	    	return "redirect:/add-document-"+userService.findBySSO(getPrincipal()).getId();
+	    	return "redirect:/open-root-folder-"+userService.findBySSO(getPrincipal()).getId();
 	    } else {
 			return "redirect:/list";
 		}
@@ -215,7 +199,6 @@ public class AppController {
 	public String logoutPage (HttpServletRequest request, HttpServletResponse response){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth != null){    
-			//new SecurityContextLogoutHandler().logout(request, response, auth);
 			persistentTokenBasedRememberMeServices.logout(request, response, auth);
 			SecurityContextHolder.getContext().setAuthentication(null);
 		}
@@ -225,8 +208,8 @@ public class AppController {
 
 
 
-	@RequestMapping(value = { "/add-document-{userId}" }, method = RequestMethod.GET)
-	public String addDocuments(@PathVariable int userId, ModelMap model) {
+	@RequestMapping(value = { "/open-root-folder-{userId}" }, method = RequestMethod.GET)
+	public String openRootFolder(@PathVariable int userId, ModelMap model) {
 
 		UserDocument doc = userDocumentService.findRootByUserId(userId);
 		return "redirect:/open-folder-"+userId+"-"+doc.getId();
@@ -262,38 +245,35 @@ public class AppController {
 	@RequestMapping(value = { "/download-document-{userId}-{docId}" }, method = RequestMethod.GET)
 	public String downloadDocument(@PathVariable int userId, @PathVariable int docId, HttpServletResponse response) throws IOException {
 		UserDocument document = userDocumentService.findById(docId);
+		File file = new File(document.getDocumentLink());
 		response.setContentType(document.getType());
-		response.setContentLength(document.getContent().length);
-//        response.setHeader("Content-Disposition","inline; filename=\"" + document.getName() +"\"");     //open in browser
-		response.setHeader("Content-Disposition","attachment; filename=\"" + document.getName() +"\""); //download file
+		response.setContentLength((int) file.length());
+		response.setHeader("Content-Disposition","attachment; filename=\"" + file.getName() +"\""); //download file
 
-
-		FileCopyUtils.copy(document.getContent(), response.getOutputStream());
-
-		return "redirect:/add-document-"+userId;
+		InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+		FileCopyUtils.copy(inputStream, response.getOutputStream());
+		return "redirect:/open-root-folder-"+userId;
 	}
 
 	@RequestMapping(value = { "/preview-document-{userId}-{docId}" }, method = RequestMethod.GET)
 	public String previewDocument(@PathVariable int userId, @PathVariable int docId, HttpServletResponse response) throws IOException {
 		UserDocument document = userDocumentService.findById(docId);
+		File file = new File(document.getDocumentLink());
 		response.setContentType(document.getType());
-		response.setContentLength(document.getContent().length);
-		response.setHeader("Content-Disposition","inline; filename=\"" + document.getName() +"\"");     //open in browser
-//		response.setHeader("Content-Disposition","attachment; filename=\"" + document.getName() +"\""); //download file
+		response.setContentLength((int) file.length());
+		response.setHeader("Content-Disposition","inline; filename=\"" + file.getName() +"\""); //download file
 
-
-		FileCopyUtils.copy(document.getContent(), response.getOutputStream());
-
-		return "redirect:/add-document-"+userId;
+		InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+		FileCopyUtils.copy(inputStream, response.getOutputStream());
+		return "redirect:/open-root-folder-"+userId;
 	}
 
 
 	//// TODO: 22.08.2016
 	//// TODO: 22.08.2016
 	@RequestMapping(value = { "/open-folder-{userId}-{docId}" }, method = RequestMethod.GET)
-	public String openFolder(@PathVariable int userId, @PathVariable int docId, ModelMap model, @ModelAttribute("folderUniqueError") String folderUniqueError) throws IOException {
-		model.addAttribute("folderUniqueError", folderUniqueError);
-
+	public String openFolder(@PathVariable int userId, @PathVariable int docId, ModelMap model, @ModelAttribute("folderError") String folderError) throws IOException {
+		model.addAttribute("folderError", folderError);
 
 		User user = userService.findBySSO(getPrincipal());
 
@@ -315,15 +295,15 @@ public class AppController {
 
 		model.addAttribute("loggedinuser", getPrincipal());
 
-
 		List<UserDocument> topFiles = userDocumentService.getTopFiles(user.getId());
 		model.addAttribute("top", topFiles);
 
+		UserDocument currentFolder = userDocumentService.findById(docId);
 
+		model.addAttribute("currentFolder", currentFolder);
+		String directory = currentFolder.getDocumentLink();
+		model.addAttribute("directory", directory.substring(directory.indexOf("ROOT")));
 
-
-
-		model.addAttribute("currentFolder", userDocumentService.findById(docId));
 
 		return "managedocuments";
 
@@ -343,7 +323,6 @@ public class AppController {
 		List<UserDocument> documents = userDocumentService.filterDocsInFolder(user.getId(), docId, filters);
 		model.addAttribute("documents", documents);
 
-
 		model.addAttribute("currentFolder", userDocumentService.findById(docId));
 
 		return "managedocuments";
@@ -351,19 +330,23 @@ public class AppController {
 	}
 	@RequestMapping(value = { "/delete-document-{userId}-{docId}-{currentFolderId}" }, method = RequestMethod.GET)
 	public String deleteDocument(@PathVariable int userId, @PathVariable int docId, @PathVariable int currentFolderId) {
+		UserDocument document = userDocumentService.findById(docId);
+		File file = new File(document.getDocumentLink());
+		if (file.exists()) file.delete();
 
 		userDocumentService.deleteById(docId, currentFolderId);
-//		return "redirect:/add-document-"+userId;
 		return "redirect:/open-folder-"+userId+"-"+currentFolderId;
 
 	}
 
 	//@Delete folder
 	@RequestMapping(value = { "/delete-folder-{userId}-{docId}" }, method = RequestMethod.GET)
-	public String deleteDocument(@PathVariable int userId, @PathVariable int docId) {
+	public String deleteFolder(@PathVariable int userId, @PathVariable int docId) {
+		File file = new File(userDocumentService.findById(docId).getDocumentLink());
+		if (file.exists()) deleteDir(file);
 		userDocumentService.deleteFolderById(docId);
 
-		return "redirect:/add-document-"+userId;
+		return "redirect:/open-root-folder-"+userId;
 	}
 
 	@RequestMapping(value = { "/add-document-{userId}-{docId}" }, method = RequestMethod.POST)
@@ -377,7 +360,7 @@ public class AppController {
 			List<UserDocument> documents = userDocumentService.findAllByUserId(userId);
 			model.addAttribute("documents", documents);
 
-			return "redirect:/add-document-"+userId;
+			return "redirect:/open-root-folder-"+userId;
 		} else {
 
 			System.out.println("Fetching file");
@@ -398,7 +381,10 @@ public class AppController {
 		String folderName = folderBucket.getFolderName();
 
 		if (userDocumentService.checkFolderNameUnique(userId, docId, folderName)){
-			redirectAttrs.addFlashAttribute("folderUniqueError", "Folder \""+folderName+"\" already exists");
+			redirectAttrs.addFlashAttribute("folderError", "Folder \""+folderName+"\" already exists");
+			return "redirect:/open-folder-"+userId+"-"+docId;
+		} else if(folderBucket.getFolderName().isEmpty()){
+			redirectAttrs.addFlashAttribute("folderError", "Folder name cannot be empty");
 			return "redirect:/open-folder-"+userId+"-"+docId;
 		}
 
@@ -414,6 +400,11 @@ public class AppController {
 
 		UserDocument document = new UserDocument();
 		UserDocument folder = userDocumentService.findById(docId);
+		File dirPath = new File(folder.getDocumentLink());
+		if (!dirPath.exists()) {
+			dirPath.mkdirs();
+		}
+
 
 		MultipartFile multipartFile = fileBucket.getFile();
 		if (multipartFile.getContentType().contains("video")) document.setGlyphicon("-video-"); else
@@ -430,7 +421,10 @@ public class AppController {
 		document.setName(multipartFile.getOriginalFilename());
 		document.setParentFolderId(docId);
 		document.setType(multipartFile.getContentType());
-		document.setContent(multipartFile.getBytes());
+
+		multipartFile.transferTo(new File(dirPath.toString()+"/"+multipartFile.getOriginalFilename()));
+
+		document.setDocumentLink((dirPath + "/" + multipartFile.getOriginalFilename()));
 		document.setUser(user);
 		document.setSize((int)multipartFile.getSize()/1000);
 
@@ -438,12 +432,22 @@ public class AppController {
 		userDocumentService.saveDocument(document);
 	}
 
-	private UserDocument createFolder(User user , String folderName) {
-		return createFolder(user, folderName, 0);
+	private UserDocument createRootFolder(User user) {
+		return new UserDocument(user, "ROOT", true, 0, LOCATION+user.getSsoId()+"/"+"ROOT"+"/");
 	}
 
 	private UserDocument createFolder(User user , String folderName, int parentFolderId) {
-		return new UserDocument(user, folderName, true, parentFolderId, "folder", new byte[]{0});
+		return new UserDocument(user, folderName, true, parentFolderId, userDocumentService.findById(parentFolderId).getDocumentLink()+folderName+"/");
+	}
+
+	void deleteDir(File file) {
+		File[] contents = file.listFiles();
+		if (contents != null) {
+			for (File f : contents) {
+				deleteDir(f);
+			}
+		}
+		file.delete();
 	}
 
 	/**

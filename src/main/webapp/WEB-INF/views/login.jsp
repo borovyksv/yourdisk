@@ -4,7 +4,7 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="Content-Type" documentLink="text/html; charset=utf-8">
     <title>Login page</title>
     <link rel="shortcut icon" href="/static/icon.png"
           type="image/x-icon">
@@ -28,8 +28,8 @@
 
 <body>
 
-<!-- Top content -->
-<div class="top-content">
+<!-- Top documentLink -->
+<div class="top-documentLink">
 
     <div class="inner-bg">
         <div class="container">

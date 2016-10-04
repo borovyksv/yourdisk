@@ -39,7 +39,7 @@ CREATE TABLE `user_document` (
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `type` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `glyphicon` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `content` longblob NOT NULL,
+  `documentLink` longblob NOT NULL,
   `size` int(11) DEFAULT '0',
   `files_counter` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),

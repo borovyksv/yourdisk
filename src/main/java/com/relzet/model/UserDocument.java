@@ -1,7 +1,6 @@
 package com.relzet.model;
 
 import javax.persistence.*;
-import java.util.Arrays;
 
 @Entity
 @Table(name = "USER_DOCUMENT")
@@ -32,8 +31,8 @@ public class UserDocument {
     private int filesCounter;
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "content", nullable = false)
-    private byte[] content;
+    @Column(name = "document_link", nullable = false)
+    private String documentLink;
     @ManyToOne(optional = false)
     @JoinColumn(name = "USER_ID")
     private User user;
@@ -41,13 +40,22 @@ public class UserDocument {
     public UserDocument() {
     }
 
-    public UserDocument(User user, String name, boolean folder, int parentFolderId, String type, byte[] content) {
+    public UserDocument(User user, String name, boolean folder, int parentFolderId, String type, String documentLink) {
         this.user = user;
         this.name = name;
         this.folder = folder;
         this.parentFolderId = parentFolderId;
         this.type = type;
-        this.content = content;
+        this.documentLink = documentLink;
+    }
+
+    public UserDocument(User user, String name, boolean folder, int parentFolderId, String documentLink) {
+        this.user = user;
+        this.name = name;
+        this.folder = folder;
+        this.parentFolderId = parentFolderId;
+        this.type = "folder";
+        this.documentLink = documentLink;
     }
 
     public int getParentFolderId() {
@@ -107,13 +115,6 @@ public class UserDocument {
         this.name = name;
     }
 
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
 
     public String getType() {
         return type;
@@ -123,12 +124,12 @@ public class UserDocument {
         this.type = type;
     }
 
-    public byte[] getContent() {
-        return content;
+    public String getDocumentLink() {
+        return documentLink;
     }
 
-    public void setContent(byte[] content) {
-        this.content = content;
+    public void setDocumentLink(String documentLink) {
+        this.documentLink = documentLink;
     }
 
     public User getUser() {
@@ -181,7 +182,6 @@ public class UserDocument {
                 ", glyphicon='" + glyphicon + '\'' +
                 ", size=" + size +
                 ", filesCounter=" + filesCounter +
-                ", content=" + Arrays.toString(content) +
                 ", user=" + user +
                 '}';
     }

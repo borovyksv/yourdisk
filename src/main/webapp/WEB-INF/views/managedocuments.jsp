@@ -9,10 +9,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta http-equiv="X-UA-Compatible" documentLink="IE=edge">
+    <meta name="viewport" documentLink="width=device-width, initial-scale=1">
+    <meta name="description" documentLink="">
+    <meta name="author" documentLink="">
 
     <title> Your Disk</title>
 
@@ -62,11 +62,10 @@
             </button>
 
 
-            <a class="navbar-brand" href="<c:url value='/add-document-${user.id}' />"><i
+            <a class="navbar-brand" href="<c:url value='/open-root-folder-${user.id}' />"><i
                     class="glyphicon glyphicon-hdd"></i> Your Disk
-                <%--<c:set var="string" value="${currentFolder.description}"/>--%>
-                <%--<span style="margin-left: 125px" class="glyphicon glyphicon-th-list"></span>--%>
-                <%--Directory: ${fn:replace(string, '.', '/')}--%>
+                <span style="margin-left: 125px" class="glyphicon glyphicon-th-list"></span>
+                Directory: ${directory}
             </a>
         </div>
         <!-- Top Menu Items -->
@@ -78,10 +77,6 @@
                         class="fa fa-user"></i> ${user.firstName} ${user.lastName} <b
                         class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <%--<li>--%>
-                    <%--<a href="#"><i class="fa fa-fw fa-user" style="color: red;"></i> Profile</a>--%>
-                    <%--</li>--%>
-
                     <li>
                         <a href="<c:url value='/edit-user-${user.ssoId}' />"><i class="fa fa-fw fa-gear"></i>
                             Profile</a>
@@ -112,7 +107,7 @@
                     </form>
                 </li>
                 <li>
-                    <a href="<c:url value='/add-document-${user.id}' />"><i class="fa fa-home fa-3"></i> ROOT Folder</a>
+                    <a href="<c:url value='/open-root-folder-${user.id}' />"><i class="fa fa-home fa-3"></i> ROOT Folder</a>
                 </li>
                 <li>
                     <a href="#" type="button" data-toggle="modal" data-target="#upload"> <span
@@ -121,9 +116,9 @@
                 <li>
                     <a href="#" type="button" data-toggle="modal" data-target="#new_folder"><span
                             class="glyphicon glyphicon-folder-close"></span> Create new Folder </a>
-                    <c:if test="${fn:length(folderUniqueError) gt 0}">
+                    <c:if test="${fn:length(folderError) gt 0}">
                         <a href="#" type="button" style="color: red"><span
-                                class="glyphicon glyphicon-warning-sign"></span> ${folderUniqueError} </a>
+                                class="glyphicon glyphicon-warning-sign"></span> ${folderError} </a>
                     </c:if>
                 </li>
                 <%----%>
@@ -350,8 +345,8 @@
 <!-- Modal -->
 <div class="modal fade" id="upload" role="dialog">
     <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
+        <!-- Modal documentLink-->
+        <div class="modal-documentLink">
             <div class="modal-header text-center">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="text-center"><span class="glyphicon glyphicon-upload"></span> Upload a document</h4>
@@ -388,8 +383,8 @@
 </div>
 <div class="modal fade" id="new_folder" role="dialog">
     <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
+        <!-- Modal documentLink-->
+        <div class="modal-documentLink">
             <div class="modal-header text-center">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="text-center"><span class="glyphicon glyphicon-folder-close"></span> Create new Folder

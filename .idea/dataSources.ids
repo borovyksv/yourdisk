@@ -124,9 +124,9 @@ user_profile_id</columns>
       <column id="32" parent="5" name="glyphicon">
         <data-type>varchar(100)</data-type>
       </column>
-      <column id="33" parent="5" name="content">
+      <column id="33" parent="5" name="document_link">
         <mandatory>1</mandatory>
-        <data-type>longblob</data-type>
+        <data-type>varchar(100)</data-type>
       </column>
       <column id="34" parent="5" name="size">
         <data-type>int(11)</data-type>
