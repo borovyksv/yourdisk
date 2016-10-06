@@ -103,14 +103,6 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 		crit.add(Restrictions.eq("type", "folder"));
 		crit.add(Restrictions.ilike("name", target, MatchMode.ANYWHERE));
 		return (List<UserDocument>)crit.list();
-
-//		List<UserDocument> result = new ArrayList<>();
-//
-//		for(UserDocument ud: findAllInFolder(userId, docId)) {
-//			if (ud.getType().equals("folder")&&ud.getName().contains(target)) result.add(ud);
-//		}
-//
-//		return result;
 	}
 
 	@Override
@@ -120,14 +112,6 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 		crit.add(Restrictions.ne("type", "folder"));
 		crit.add(Restrictions.ilike("name", target, MatchMode.ANYWHERE));
 		return (List<UserDocument>)crit.list();
-
-//		List<UserDocument> result = new ArrayList<UserDocument>();
-//
-//		for(UserDocument ud: findAllInFolder(userId, docId)) {
-//			if ((!ud.getType().equals("folder"))&&ud.getName().contains(target)) result.add(ud);
-//		}
-//
-//		return result;
 	}
 
 	@Override
@@ -135,7 +119,7 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 		List<UserDocument> result = new ArrayList<>();
 		List<String> formats = new ArrayList<>();
 
-		//here you can change filter formats
+		//here you can change filter formats by updating or adding new arrays of key format words
 		for (String filter : filters) {
 			switch (filter) {
 				case "documents": formats.addAll(new ArrayList<>(Arrays.asList("text", "plain", "pdf", "officedocument", "msword"))); break;
@@ -144,7 +128,6 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 				case "zip": formats.addAll(new ArrayList<>(Arrays.asList("zip")));break;
 			}
 		}
-
 		for(UserDocument ud: findAllByUserId(userId)) {
 			for (String format : formats)
 			if (ud.getType().contains(format)) result.add(ud);
@@ -167,6 +150,5 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 		crit.addOrder(Order.desc("size"));
 		crit.setMaxResults(5);
 		return (List<UserDocument>)crit.list();
-
 	}
 }
