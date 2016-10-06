@@ -304,6 +304,10 @@ public class AppController {
 		String directory = currentFolder.getDocumentLink();
 		model.addAttribute("directory", directory.substring(directory.indexOf("ROOT")));
 
+		int parentFolderId = currentFolder.getParentFolderId();
+		model.addAttribute("parent_folder_id", parentFolderId==0?currentFolder.getId():parentFolderId);
+
+
 
 		return "managedocuments";
 
