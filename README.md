@@ -1,4 +1,4 @@
-##MySQL serring up:##
+##MySQL setting up:##
   
 create database yourdiskdb;   
 use yourdiskdb;  
