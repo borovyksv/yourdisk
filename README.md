@@ -1,5 +1,8 @@
+##MySQL serring up:##
+  
 create database yourdiskdb;   
 use yourdiskdb;  
+  
 ---
 ###/* All User's gets stored in APP_USER table */###
 
