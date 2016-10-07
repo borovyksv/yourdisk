@@ -1,7 +1,7 @@
 create database yourdiskdb;   
-use yourdiskdb;
+use yourdiskdb;  
 ---
-###All User's gets stored in APP_USER table###
+###/* All User's gets stored in APP_USER table */###
 
 create table APP_USER (
 id BIGINT NOT NULL AUTO_INCREMENT,  
@@ -14,7 +14,7 @@ PRIMARY KEY (id),
 UNIQUE (sso_id)  
 );
    
-###USER_PROFILE table contains all possible roles ###
+###/* USER_PROFILE table contains all possible roles */###
 
 create table USER_PROFILE(  
    id BIGINT NOT NULL AUTO_INCREMENT,  
@@ -23,7 +23,7 @@ create table USER_PROFILE(
    UNIQUE (type)  
 );
    
-###JOIN TABLE for MANY-TO-MANY relationship###
+###/* JOIN TABLE for MANY-TO-MANY relationship */###
 
 CREATE TABLE APP_USER_USER_PROFILE (  
     user_id BIGINT NOT NULL,  
@@ -33,7 +33,7 @@ CREATE TABLE APP_USER_USER_PROFILE (
     CONSTRAINT FK_USER_PROFILE FOREIGN KEY (user_profile_id) REFERENCES USER_PROFILE (id)  
 );  
 
-###USER_DOCUMENT table contains all user documents ###
+###/* USER_DOCUMENT table contains all user documents */###
 
 CREATE TABLE user_document (  
 id bigint(20) NOT NULL AUTO_INCREMENT,  
@@ -51,7 +51,7 @@ parent_folder_id int(11) DEFAULT '0',
   CONSTRAINT document_user FOREIGN KEY (user_id) REFERENCES app_user (id) ON DELETE CASCADE ON UPDATE CASCADE  
 );  
   
-###Populate USER_PROFILE Table ###
+###/* Populate USER_PROFILE Table */###
 
 INSERT INTO USER_PROFILE(type)    
 VALUES ('USER');
@@ -63,19 +63,19 @@ INSERT INTO USER_PROFILE(type)
 VALUES ('DBA');  
   
   
-###Populate one Admin User which will further create other users for the application using GUI ###
+###/* Populate one Admin User which will further create other users for the application using GUI */###
 
 INSERT INTO APP_USER(sso_id, password, first_name, last_name, email)  
 VALUES ('admin','$2a$10$pOEgkVsH/J0t5k5h/3npXeAliJJp6eJIEXLmTgcK1eouiqBZTLsfe', 'admin','admin','admin@admin.com');  
   
   
-###Populate JOIN Table ###
+###/* Populate JOIN Table */###
 
 INSERT INTO APP_USER_USER_PROFILE (user_id, user_profile_id)  
   SELECT user.id, profile.id FROM app_user user, user_profile profile  
   where user.sso_id='sam' and profile.type='ADMIN';  
  
-###Create persistent_logins Table used to store rememberme related stuff###
+###/* Create persistent_logins Table used to store rememberme related stuff */###
 
 CREATE TABLE persistent_logins (  
     username VARCHAR(64) NOT NULL,  
