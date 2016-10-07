@@ -1,8 +1,8 @@
-create database yourdiskdb; 
+create database yourdiskdb;   
 use yourdiskdb;
-
-###All User's gets stored in APP_USER table###
 ---
+###All User's gets stored in APP_USER table###
+
 create table APP_USER (
 id BIGINT NOT NULL AUTO_INCREMENT,  
 sso_id VARCHAR(30) NOT NULL,  
@@ -23,7 +23,7 @@ create table USER_PROFILE(
    UNIQUE (type)  
 );
    
- ###JOIN TABLE for MANY-TO-MANY relationship###
+###JOIN TABLE for MANY-TO-MANY relationship###
 
 CREATE TABLE APP_USER_USER_PROFILE (  
     user_id BIGINT NOT NULL,  
