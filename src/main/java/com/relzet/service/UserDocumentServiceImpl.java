@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service("userDocumentService")
 @Transactional
@@ -86,7 +87,7 @@ public class UserDocumentServiceImpl implements UserDocumentService{
 	}
 
 	@Override
-	public List<UserDocument> getTopFiles(int id) {
+	public Map<String, Long> getTopFiles(int id) {
 		return dao.getTopFiles(id);
 	}
 

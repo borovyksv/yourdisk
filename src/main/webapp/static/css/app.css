@@ -42,7 +42,7 @@ background-image: linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #0007ff 100%, #9e
 .glyphicon-th-list{
 	float: left;
 	height: 50px;
-	padding: 15px 15px;
+	padding: 12px 15px;
 	font-size: 18px;
 	line-height: 20px;
 	margin-left: 100px;
@@ -62,10 +62,24 @@ background-image: linear-gradient(top, #EDEDED 0%, #EAEAEA 8%, #0007ff 100%, #9e
 .directory{
 	float: left;
 	height: 50px;
-	padding: 17px 0px;
+	padding: 15px 0px;
 	font-size: 18px;
 	line-height: 20px;
 	color: #9d9d9d;
+
+	/*colors: ['#000000', '#0f7a09', '#c62715', '#d7d30f', '#05e187', '#9ea1ff', '#f4ee06', '#676760', '#052C48', '#042135'],*/
+
+	/*color: #000000;*/
+	/*color: #0f7a09;*/
+	/*color: #c62715;*/
+	/*color: #d7d30f;*/
+	/*color: #05e187;*/
+	/*color: #9ea1ff;*/
+	/*color: #f4ee06;*/
+	/*color: #676760;*/
+	/*color: #052C48;*/
+	/*color: #042135;*/
+
 }
 
 body, #mainWrapper, .form-control{
@@ -321,4 +335,9 @@ Css orignal http://codepen.io/jlalovi/details/bIyAr
 
 #divname{
 	height:100px;
+}
+
+.navstrong {
+	margin-left: 100px;
+	font-size:18px;
 }

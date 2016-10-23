@@ -3,6 +3,7 @@ package com.relzet.service;
 import com.relzet.model.UserDocument;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserDocumentService {
 
@@ -37,5 +38,5 @@ public interface UserDocumentService {
 
 	void updateDocument(UserDocument document);
 
-	List<UserDocument> getTopFiles(int id);
+	Map<String, Long> getTopFiles(int id);
 }

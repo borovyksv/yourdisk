@@ -8,6 +8,7 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" type="text/css" href="src/main/webapp/static/css/app.css"/>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" documentLink="IE=edge">
     <meta name="viewport" documentLink="width=device-width, initial-scale=1">
@@ -45,8 +46,24 @@
             </button>
 
             <span class="navbar-brand"><i class="glyphicon glyphicon-hdd"></i> Your Disk </span>
-            <span class=" glyphicon glyphicon-th-list"></span><strong class="directory">
-            Directory: ${directory}</strong>
+            <%--<span class=" glyphicon glyphicon-th-list"></span><strong class="directory">--%>
+            <%--Directory: ${directory}</strong>--%>
+
+            <ul class="nav navbar-nav navstrong">
+                <li class="nav-item">
+                    <a class="nav-link" href="<c:url value='/open-root-folder-${user.id}' />">
+                        <strong><i class="fa fa-home fa-3"></i> Home</strong></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<c:url value='/open-folder-${user.id}-${parent_folder_id}'/>">
+                        <strong> <i class="fa fa-arrow-up fa-3"></i> Go up</strong></a>
+                </li>
+                <li class="nav-item">
+                    <span class="glyphicon glyphicon-th-list nav-item"></span><strong class="directory">
+                    Directory: ${directory}</strong>
+                </li>
+
+            </ul>
 
         </div>
         <!-- Top Menu Items -->
@@ -91,14 +108,14 @@
                         </form>
                     </div>
                 </li>
-                <li>
-                    <a href="<c:url value='/open-root-folder-${user.id}' />"><hr><i class="fa fa-home fa-3"></i>
-                        ROOT Folder</a>
-                </li>
-                <li>
-                    <a href="<c:url value='/open-folder-${user.id}-${parent_folder_id}'/>"><i class="fa fa-arrow-up fa-3"></i>
-                        GO UP</a>
-                </li>
+                <%--<li>--%>
+                    <%--<a href="<c:url value='/open-root-folder-${user.id}' />"><hr><i class="fa fa-home fa-3"></i>--%>
+                        <%--ROOT Folder</a>--%>
+                <%--</li>--%>
+                <%--<li>--%>
+                    <%--<a href="<c:url value='/open-folder-${user.id}-${parent_folder_id}'/>"><i class="fa fa-arrow-up fa-3"></i>--%>
+                        <%--GO UP</a>--%>
+                <%--</li>--%>
 
                 <li>
                     <a href="#" type="button" data-toggle="modal" data-target="#upload"><hr> <span class="glyphicon glyphicon-upload"></span>
@@ -114,7 +131,7 @@
                 </li>
                 <li>
                     <a href="javascript:;" data-toggle="collapse" data-target="#demo1" title="By size in KB"><hr><span class="fa fa-pie-chart"></span>
-                        TOP files <i class="fa fa-fw fa-caret-down"></i></a>
+                        Types structure <i class="fa fa-fw fa-caret-down"></i></a>
                     <div id="demo1" class="collapse in container row">
                         <div id="morris-donut-chart" style="height: 220px;width: 220px;"></div>
                     </div>
@@ -130,7 +147,12 @@
         <div class="container-fluid">
             <div class="divider"></div>
             <c:if test="${fn:length(folders) gt 0}">
-                <div class="alert alert-success cursor" data-toggle="collapse" data-target="#folders-collapse"
+                <%--<div class="alert alert-success cursor" data-toggle="collapse" data-target="#folders-collapse"--%>
+                     <%--aria-expanded="false" aria-controls="collapseExample">--%>
+                    <%--<strong><span class="glyphicon glyphicon-plus"></span> Folders </strong>--%>
+                <%--</div>--%>
+                <%--<div class="row collapse in" id="folders-collapse">--%>
+                <div class="alert alert-success" data-toggle="collapse" data-target="#folders-collapse"
                      aria-expanded="false" aria-controls="collapseExample">
                     <strong><span class="glyphicon glyphicon-plus"></span> Folders </strong>
                 </div>
@@ -309,16 +331,30 @@
 
 <%--This script is used to add some graphic visualisation to TOP files feature--%>
 <script>
+    <%--(function () {--%>
+        <%--Morris.Donut({--%>
+            <%--element: 'morris-donut-chart',--%>
+            <%--data: [--%>
+                <%--<c:forEach items="${top}" var="doc" varStatus="counter">--%>
+                <%--{--%>
+                    <%--<c:set var="string1" value="${doc.name}"/>--%>
+                    <%--<c:set var="string2" value="${fn:substring(string1, 0, 15)}" />--%>
+                    <%--label: "${string2}",--%>
+                    <%--value: ${doc.size}--%>
+                <%--},--%>
+                <%--</c:forEach>--%>
+            <%--],--%>
+            <%--resize: true--%>
+        <%--})--%>
+    <%--})();--%>
     (function () {
         Morris.Donut({
             element: 'morris-donut-chart',
             data: [
                 <c:forEach items="${top}" var="doc" varStatus="counter">
                 {
-                    <c:set var="string1" value="${doc.name}"/>
-                    <c:set var="string2" value="${fn:substring(string1, 0, 15)}" />
-                    label: "${string2}",
-                    value: ${doc.size}
+                    label: "${doc.key}",
+                    value: ${doc.value}
                 },
                 </c:forEach>
             ],

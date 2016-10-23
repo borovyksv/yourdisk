@@ -3,6 +3,7 @@ package com.relzet.dao;
 import com.relzet.model.UserDocument;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserDocumentDao {
 
@@ -36,5 +37,5 @@ public interface UserDocumentDao {
 
 	boolean checkFolderNameUnique(int userId, int docId, String folderName);
 
-	List<UserDocument> getTopFiles(int id);
+	Map<String, Long> getTopFiles(int id);
 }

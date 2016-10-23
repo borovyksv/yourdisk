@@ -28,6 +28,7 @@ import javax.validation.Valid;
 import java.io.*;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 @Controller
@@ -248,7 +249,7 @@ public class AppController {
 		model.addAttribute("loggedinuser", getPrincipal());
 
 		//	This attribute will populate morris-donut-chart widget on the view
-		List<UserDocument> topFiles = userDocumentService.getTopFiles(user.getId());
+		Map<String, Long> topFiles = userDocumentService.getTopFiles(user.getId());
 		model.addAttribute("top", topFiles);
 
 		//	This attribute will provide relation with a Controller in generating links
