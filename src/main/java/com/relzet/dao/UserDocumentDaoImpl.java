@@ -3,6 +3,7 @@ package com.relzet.dao;
 import com.relzet.model.UserDocument;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -15,8 +16,8 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 	//Files types constants:
 	private String VIDEO = "video";
 	private String AUDIO = "audio";
-	private String PICTURE = "picture";
-	private String DOCUMENT = "document";
+	private String PICTURE = "images";
+	private String DOCUMENT = "docs";
 	private String ZIP = "zip";
 	private String OTHER = "other";
 
@@ -150,17 +151,17 @@ public class UserDocumentDaoImpl extends AbstractDao<Integer, UserDocument> impl
 		return false;
 	}
 
-//	@Override
-//	public List<UserDocument> getTopFiles(int userId) {
-//		Criteria crit = getCriteriaByUserId(userId);
-//		crit.add(Restrictions.eq("folder", false));
-//		crit.addOrder(Order.desc("size"));
-//		crit.setMaxResults(5);
-//		return (List<UserDocument>)crit.list();
-//	}
+	@Override
+	public List<UserDocument> getTopFiles(int userId) {
+		Criteria crit = getCriteriaByUserId(userId);
+		crit.add(Restrictions.eq("folder", false));
+		crit.addOrder(Order.desc("size"));
+		crit.setMaxResults(5);
+		return (List<UserDocument>)crit.list();
+	}
 
 	@Override
-	public Map<String, Long> getTopFiles(int userId) {
+	public Map<String, Long> getTypesStructure(int userId) {
 		Map<String, Long> map = new HashMap<>();
 		map.put(VIDEO, 0L);
 		map.put(AUDIO, 0L);

@@ -38,5 +38,7 @@ public interface UserDocumentService {
 
 	void updateDocument(UserDocument document);
 
-	Map<String, Long> getTopFiles(int id);
+	Map<String, Long> getTypesStructure(int id);
+
+	List<UserDocument> getTopFiles(int userId);
 }

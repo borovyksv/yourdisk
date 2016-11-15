@@ -87,9 +87,16 @@ public class UserDocumentServiceImpl implements UserDocumentService{
 	}
 
 	@Override
-	public Map<String, Long> getTopFiles(int id) {
-		return dao.getTopFiles(id);
+	public Map<String, Long> getTypesStructure(int id) {
+		return dao.getTypesStructure(id);
 	}
+
+	@Override
+	public List<UserDocument> getTopFiles(int userId)  {
+		return dao.getTopFiles(userId);
+	}
+
+
 
 
 }

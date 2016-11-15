@@ -249,8 +249,12 @@ public class AppController {
 		model.addAttribute("loggedinuser", getPrincipal());
 
 		//	This attribute will populate morris-donut-chart widget on the view
-		Map<String, Long> topFiles = userDocumentService.getTopFiles(user.getId());
+		List<UserDocument> topFiles = userDocumentService.getTopFiles(user.getId());
 		model.addAttribute("top", topFiles);
+
+		//	This attribute will populate morris-donut-chart widget on the view
+		Map<String, Long> structure = userDocumentService.getTypesStructure(user.getId());
+		model.addAttribute("structure", structure);
 
 		//	This attribute will provide relation with a Controller in generating links
 		UserDocument currentFolder = userDocumentService.findById(docId);

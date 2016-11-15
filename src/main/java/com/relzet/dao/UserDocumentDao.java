@@ -37,5 +37,7 @@ public interface UserDocumentDao {
 
 	boolean checkFolderNameUnique(int userId, int docId, String folderName);
 
-	Map<String, Long> getTopFiles(int id);
+	List<UserDocument> getTopFiles(int userId);
+
+	Map<String, Long> getTypesStructure(int id);
 }

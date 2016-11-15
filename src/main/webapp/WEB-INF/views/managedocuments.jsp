@@ -9,6 +9,7 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="src/main/webapp/static/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="src/main/webapp/static/css/app.css"/>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" documentLink="IE=edge">
     <meta name="viewport" documentLink="width=device-width, initial-scale=1">
@@ -24,6 +25,7 @@
     <!-- Custom CSS -->
     <link href="<c:url value='/static/css/sb-admin.css' />" rel="stylesheet">
     <link href="<c:url value='/static/css/app.css' />" rel="stylesheet">
+    <link href="<c:url value='/static/css/footer-distributed.css' />" rel="stylesheet">
     <!-- Morris Charts CSS -->
     <link href="<c:url value='/static/css/plugins/morris.css' />" rel="stylesheet">
     <!-- Custom Fonts -->
@@ -52,11 +54,11 @@
             <ul class="nav navbar-nav navstrong">
                 <li class="nav-item">
                     <a class="nav-link" href="<c:url value='/open-root-folder-${user.id}' />">
-                        <strong><i class="fa fa-home fa-3"></i> Home</strong></a>
+                        <strong class="navbut"><i class="fa fa-home fa-3"></i> Home</strong></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<c:url value='/open-folder-${user.id}-${parent_folder_id}'/>">
-                        <strong> <i class="fa fa-arrow-up fa-3"></i> Go up</strong></a>
+                        <strong class="navbut"> <i class="fa fa-arrow-up fa-3"></i> Go up</strong></a>
                 </li>
                 <li class="nav-item">
                     <span class="glyphicon glyphicon-th-list nav-item"></span><strong class="directory">
@@ -130,10 +132,17 @@
                     </c:if>
                 </li>
                 <li>
-                    <a href="javascript:;" data-toggle="collapse" data-target="#demo1" title="By size in KB"><hr><span class="fa fa-pie-chart"></span>
+                    <a href="javascript:;" data-toggle="collapse" data-target="#demo2" title="By size in KB"><hr><span class="fa fa-pie-chart"></span>
+                        Top files <i class="fa fa-fw fa-caret-down"></i></a>
+                    <div id="demo2" class="collapse container row">
+                        <div id="morris-donut-chart-top" style="height: 220px;width: 200px;"></div>
+                    </div>
+                </li>
+                <li>
+                    <a href="javascript:;" data-toggle="collapse" data-target="#demo1" title="By size in KB"><span class="fa fa-pie-chart"></span>
                         Types structure <i class="fa fa-fw fa-caret-down"></i></a>
                     <div id="demo1" class="collapse in container row">
-                        <div id="morris-donut-chart" style="height: 220px;width: 220px;"></div>
+                        <div id="morris-donut-chart" style="height: 220px;width: 210px;"></div>
                     </div>
                 </li>
             </ul>
@@ -147,12 +156,7 @@
         <div class="container-fluid">
             <div class="divider"></div>
             <c:if test="${fn:length(folders) gt 0}">
-                <%--<div class="alert alert-success cursor" data-toggle="collapse" data-target="#folders-collapse"--%>
-                     <%--aria-expanded="false" aria-controls="collapseExample">--%>
-                    <%--<strong><span class="glyphicon glyphicon-plus"></span> Folders </strong>--%>
-                <%--</div>--%>
-                <%--<div class="row collapse in" id="folders-collapse">--%>
-                <div class="alert alert-success" data-toggle="collapse" data-target="#folders-collapse"
+                <div class="alert alert-success cursor" data-toggle="collapse" data-target="#folders-collapse"
                      aria-expanded="false" aria-controls="collapseExample">
                     <strong><span class="glyphicon glyphicon-plus"></span> Folders </strong>
                 </div>
@@ -317,6 +321,23 @@
 </div>
 
 
+<footer class="footer-distributed">
+
+    <div class="footer-right">
+
+        <a href="https://www.facebook.com/profile.php?id=100006472218074"><i class="fa fa-facebook"></i></a>
+        <a href="#"><i class="fa fa-linkedin"></i></a>
+        <a href="https://vk.com/darkush"><i class="fa fa-vk"></i></a>
+        <a href="https://github.com/relzet/"><i class="fa fa-github"></i></a>
+
+    </div>
+
+    <div class="footer-left">
+        <p>Borovyk Sergey © 2016</p>
+    </div>
+
+</footer>
+
 <!-- jQuery -->
 <script src="/static/js/jquery.js"></script>
 
@@ -331,27 +352,27 @@
 
 <%--This script is used to add some graphic visualisation to TOP files feature--%>
 <script>
-    <%--(function () {--%>
-        <%--Morris.Donut({--%>
-            <%--element: 'morris-donut-chart',--%>
-            <%--data: [--%>
-                <%--<c:forEach items="${top}" var="doc" varStatus="counter">--%>
-                <%--{--%>
-                    <%--<c:set var="string1" value="${doc.name}"/>--%>
-                    <%--<c:set var="string2" value="${fn:substring(string1, 0, 15)}" />--%>
-                    <%--label: "${string2}",--%>
-                    <%--value: ${doc.size}--%>
-                <%--},--%>
-                <%--</c:forEach>--%>
-            <%--],--%>
-            <%--resize: true--%>
-        <%--})--%>
-    <%--})();--%>
+    (function () {
+        Morris.Donut({
+            element: 'morris-donut-chart-top',
+            data: [
+                <c:forEach items="${top}" var="doc" varStatus="counter">
+                {
+                    <c:set var="string1" value="${doc.name}"/>
+                    <c:set var="string2" value="${fn:substring(string1, 0, 15)}" />
+                    label: "${string2}",
+                    value: ${doc.size}
+                },
+                </c:forEach>
+            ],
+            resize: true
+        })
+    })();
     (function () {
         Morris.Donut({
             element: 'morris-donut-chart',
             data: [
-                <c:forEach items="${top}" var="doc" varStatus="counter">
+                <c:forEach items="${structure}" var="doc" varStatus="counter">
                 {
                     label: "${doc.key}",
                     value: ${doc.value}
